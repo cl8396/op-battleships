@@ -1,7 +1,11 @@
-import createShip from '../modules/ship';
+import createShip from '../factories/create-ship';
 
 describe('default, normal behaviour', () => {
-  let ship = createShip(1);
+  let ship;
+
+  beforeEach(() => {
+    ship = createShip(1);
+  });
 
   it('should be an object', () => {
     expect(ship).toEqual(expect.any(Object));
@@ -18,6 +22,6 @@ describe('bad length value', () => {
   it('should throw an error when length <= 0', () => {
     expect(() => {
       return createShip(0);
-    }).toThrowError('Invalid length. Must be greater than 0');
+    }).toThrow('Invalid length. Must be greater than 0');
   });
 });
