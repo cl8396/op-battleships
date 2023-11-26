@@ -1,7 +1,23 @@
 import createGameboard from '../factories/create-gameboard';
 
 let gameboard;
-beforeAll(() => {
+
+// mock functions
+let mockCreateShip = jest.fn((length) => {
+  return {
+    length: length,
+    numberOfHits: 0,
+    hit() {
+      this.numberOfHits++;
+    },
+
+    isSunk() {
+      return this.numberOfHits >= this.length ? true : false;
+    },
+  };
+});
+
+beforeEach(() => {
   gameboard = createGameboard();
 });
 
@@ -16,10 +32,6 @@ describe('default, normal behaviour', () => {
 });
 
 describe('place ship method', () => {
-  let mockCreateShip = jest.fn(() => {
-    return {};
-  });
-
   let coordinates = [
     [0, 0],
     [0, 1],
@@ -36,7 +48,34 @@ describe('place ship method', () => {
 
   it('places ship at specific coordinates', () => {
     gameboard.placeShip(mockCreateShip, coordinates);
-    expect(gameboard.grid[0][0]).toEqual(mockCreateShip());
-    expect(gameboard.grid[0][1]).toEqual(mockCreateShip());
+    console.log(gameboard.grid[0][0]);
+    console.log(mockCreateShip(2));
+    expect(gameboard.grid[0][0]).toBe(gameboard.grid[0][1]);
+    expect(gameboard.grid[0][0].length).toBe(2);
+  });
+});
+
+describe('receive attack method', () => {
+  it('records a miss', () => {
+    let coordinates = [0, 0];
+    gameboard.receiveAttack(coordinates);
+    expect(gameboard.misses).toContain(coordinates);
+  });
+
+  it('records a hit', () => {
+    let shipLocation = [[2, 0]];
+    let targetCoordinate = [2, 0];
+
+    gameboard.placeShip(mockCreateShip, shipLocation);
+    gameboard.receiveAttack(targetCoordinate);
+
+    let ship = gameboard.grid[2][0];
+    expect(ship.isSunk()).toBe(true);
+  });
+
+  it('check all ships are sunk', () => {
+    expect(gameboard.areAllSunk()).toBe(true);
+    gameboard.placeShip(mockCreateShip, [[0, 0]]);
+    expect(gameboard.areAllSunk()).toBe(false);
   });
 });
