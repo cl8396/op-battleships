@@ -1,6 +1,15 @@
-function createPlayer(createBoard) {
-  let gameboard = createBoard();
+import createGameboard from './create-gameboard.js';
+
+function createPlayer(options = {}) {
+  let gameboard;
+
+  if (options.createGameboard) {
+    gameboard = options.createGameboard();
+  } else {
+    gameboard = createGameboard();
+  }
   const tries = [];
+  const isAi = options.isAi || false;
 
   const takeTurn = (enemy, coordinates) => {
     if (!coordinates) {
@@ -15,7 +24,7 @@ function createPlayer(createBoard) {
       }
     }
 
-    enemy.gameboard.recieveAttack(coordinates);
+    enemy.gameboard.receiveAttack(coordinates);
     tries.push(coordinates);
   };
 
@@ -28,6 +37,7 @@ function createPlayer(createBoard) {
   return {
     gameboard,
     tries,
+    isAi,
     takeTurn,
   };
 }

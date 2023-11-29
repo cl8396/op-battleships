@@ -1,3 +1,5 @@
+import createShip from './create-ship.js';
+
 function createGameboard() {
   let grid = [];
   let misses = [];
@@ -23,9 +25,9 @@ function createGameboard() {
     }
   };
 
-  const placeShip = (createShip, coordinates) => {
+  const placeShip = (coordinates, createShipFn = createShip) => {
     // coordinates = [[0, 0]]
-    let newShip = createShip(coordinates.length);
+    let newShip = createShipFn(coordinates.length);
     coordinates.forEach((set) => {
       // set = [0, 0]
       let x = set[0];
