@@ -42,14 +42,12 @@ describe('place ship method', () => {
   });
 
   it('calls create ship factory function', () => {
-    gameboard.placeShip(mockCreateShip, coordinates);
+    gameboard.placeShip(coordinates, mockCreateShip);
     expect(mockCreateShip.mock.calls).toHaveLength(1);
   });
 
   it('places ship at specific coordinates', () => {
-    gameboard.placeShip(mockCreateShip, coordinates);
-    console.log(gameboard.grid[0][0]);
-    console.log(mockCreateShip(2));
+    gameboard.placeShip(coordinates, mockCreateShip);
     expect(gameboard.grid[0][0]).toBe(gameboard.grid[0][1]);
     expect(gameboard.grid[0][0].length).toBe(2);
   });
@@ -66,7 +64,7 @@ describe('receive attack method', () => {
     let shipLocation = [[2, 0]];
     let targetCoordinate = [2, 0];
 
-    gameboard.placeShip(mockCreateShip, shipLocation);
+    gameboard.placeShip(shipLocation, mockCreateShip);
     gameboard.receiveAttack(targetCoordinate);
 
     let ship = gameboard.grid[2][0];
@@ -75,7 +73,7 @@ describe('receive attack method', () => {
 
   it('check all ships are sunk', () => {
     expect(gameboard.areAllSunk()).toBe(true);
-    gameboard.placeShip(mockCreateShip, [[0, 0]]);
+    gameboard.placeShip([[0, 0]], mockCreateShip);
     expect(gameboard.areAllSunk()).toBe(false);
   });
 });
