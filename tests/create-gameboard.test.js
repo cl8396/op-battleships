@@ -33,8 +33,8 @@ describe('default, normal behaviour', () => {
 
 describe('place ship method', () => {
   let coordinates = [
-    [0, 0],
-    [0, 1],
+    [1, 1],
+    [1, 2],
   ];
 
   it('exists', () => {
@@ -48,32 +48,32 @@ describe('place ship method', () => {
 
   it('places ship at specific coordinates', () => {
     gameboard.placeShip(coordinates, mockCreateShip);
-    expect(gameboard.grid[0][0]).toBe(gameboard.grid[0][1]);
-    expect(gameboard.grid[0][0].length).toBe(2);
+    expect(gameboard.grid[1][1]).toBe(gameboard.grid[1][2]);
+    expect(gameboard.grid[1][1].length).toBe(2);
   });
 });
 
 describe('receive attack method', () => {
   it('records a miss', () => {
-    let coordinates = [0, 0];
+    let coordinates = [1, 1];
     gameboard.receiveAttack(coordinates);
     expect(gameboard.misses).toContain(coordinates);
   });
 
   it('records a hit', () => {
-    let shipLocation = [[2, 0]];
-    let targetCoordinate = [2, 0];
+    let shipLocation = [[2, 1]];
+    let targetCoordinate = [2, 1];
 
     gameboard.placeShip(shipLocation, mockCreateShip);
     gameboard.receiveAttack(targetCoordinate);
 
-    let ship = gameboard.grid[2][0];
+    let ship = gameboard.grid[2][1];
     expect(ship.isSunk()).toBe(true);
   });
 
   it('check all ships are sunk', () => {
     expect(gameboard.areAllSunk()).toBe(true);
-    gameboard.placeShip([[0, 0]], mockCreateShip);
+    gameboard.placeShip([[1, 1]], mockCreateShip);
     expect(gameboard.areAllSunk()).toBe(false);
   });
 });

@@ -5,9 +5,9 @@ function createGameboard() {
   let misses = [];
   let ships = [];
 
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 1; i <= 10; i++) {
     grid[i] = [];
-    for (let j = 0; j <= 10; j++) {
+    for (let j = 1; j <= 10; j++) {
       grid[i][j] = null;
     }
   }
@@ -26,10 +26,10 @@ function createGameboard() {
   };
 
   const placeShip = (coordinates, createShipFn = createShip) => {
-    // coordinates = [[0, 0]]
+    // coordinates = [[1, 1]]
     let newShip = createShipFn(coordinates.length);
     coordinates.forEach((set) => {
-      // set = [0, 0]
+      // set = [1, 1]
       let x = set[0];
       let y = set[1];
       grid[x][y] = newShip;
