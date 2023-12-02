@@ -15,6 +15,15 @@ class GameController {
     this.opponent = createPlayer({ isAi: true });
     this.populateGameboard(this.user, this.opponent);
     this.currentPlayer = this.user;
+
+    eventEmitter.emit('newGameStarted');
+    eventEmitter.emit('currentPlayerChange', {
+      currentPlayer: this.currentPlayer,
+    });
+    eventEmitter.emit('playersCreated', {
+      user: this.user,
+      opponent: this.opponent,
+    });
   }
 
   processTurn(coordinates) {
@@ -24,6 +33,7 @@ class GameController {
 
     const otherPlayer = this.getOtherPlayer();
     this.currentPlayer.takeTurn(otherPlayer, coordinates);
+
     this.currentPlayer = otherPlayer;
 
     if (this.checkGameOver()) {
@@ -49,6 +59,7 @@ class GameController {
 
   endGame() {
     this.isGameOver = true;
+    eventEmitter.emit('gameOver', { winner: this.currentPlayer });
   }
 
   populateGameboard(...players) {
