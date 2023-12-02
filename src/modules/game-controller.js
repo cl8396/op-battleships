@@ -1,10 +1,13 @@
 import createPlayer from '../factories/create-player.js';
+import eventEmitter from './event-emitter.js';
 
-const gameController = {
-  user: null,
-  opponent: null,
-  isGameOver: true,
-  currentPlayer: null,
+class GameController {
+  constructor() {
+    this.user = null;
+    this.opponent = null;
+    this.isGameOver = true;
+    this.currentPlayer = null;
+  }
 
   newGame() {
     this.isGameOver = false;
@@ -12,14 +15,14 @@ const gameController = {
     this.opponent = createPlayer({ isAi: true });
     this.populateGameboard(this.user, this.opponent);
     this.currentPlayer = this.user;
-  },
+  }
 
   processTurn(coordinates) {
     if (this.isGameOver) {
-      throw new Error(`Can't make move, game is over.`);
+      throw new Error(`Can't make a move; the game is over.`);
     }
 
-    let otherPlayer = this.getOtherPlayer();
+    const otherPlayer = this.getOtherPlayer();
     this.currentPlayer.takeTurn(otherPlayer, coordinates);
     this.currentPlayer = otherPlayer;
 
@@ -27,34 +30,26 @@ const gameController = {
       this.endGame();
       return;
     }
-    // make the computer's move
+
+    // Make the computer's move
     if (this.currentPlayer.isAi) {
       this.processTurn();
     }
-  },
+  }
 
   getOtherPlayer() {
-    if (this.currentPlayer === this.user) {
-      return this.opponent;
-    } else {
-      return this.user;
-    }
-  },
+    return this.currentPlayer === this.user ? this.opponent : this.user;
+  }
 
   checkGameOver() {
-    if (
-      this.user.gameboard.areAllSunk() === true ||
-      this.opponent.gameboard.areAllSunk() === true
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  },
+    return (
+      this.user.gameboard.areAllSunk() || this.opponent.gameboard.areAllSunk()
+    );
+  }
 
   endGame() {
     this.isGameOver = true;
-  },
+  }
 
   populateGameboard(...players) {
     players.forEach((player) => {
@@ -64,7 +59,9 @@ const gameController = {
         [0, 2],
       ]);
     });
-  },
-};
+  }
+}
+
+const gameController = new GameController();
 
 export default gameController;
