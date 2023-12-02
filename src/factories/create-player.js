@@ -1,6 +1,6 @@
 import createGameboard from './create-gameboard.js';
 
-function createPlayer(options = {}) {
+function createPlayer(name, options = {}) {
   let gameboard;
 
   if (options.createGameboard) {
@@ -35,6 +35,7 @@ function createPlayer(options = {}) {
   };
 
   return {
+    name,
     gameboard,
     tries,
     isAi,

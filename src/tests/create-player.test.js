@@ -12,8 +12,8 @@ let options = {
 };
 
 beforeEach(() => {
-  player = createPlayer(options);
-  enemy = createPlayer(options);
+  player = createPlayer('player1', options);
+  enemy = createPlayer('enemy1', options);
 });
 
 describe('take turn method', () => {
