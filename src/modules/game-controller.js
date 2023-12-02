@@ -11,14 +11,14 @@ class GameController {
 
   newGame() {
     this.isGameOver = false;
-    this.user = createPlayer();
-    this.opponent = createPlayer({ isAi: true });
-    this.populateGameboard(this.user, this.opponent);
+    this.user = createPlayer('player1');
+    this.opponent = createPlayer('computer', { isAi: true });
+    this.#populateGameboard(this.user, this.opponent);
     this.currentPlayer = this.user;
 
     eventEmitter.emit('newGameStarted');
     eventEmitter.emit('currentPlayerChange', {
-      currentPlayer: this.currentPlayer,
+      currentPlayer: this.currentPlayer.name,
     });
     eventEmitter.emit('playersCreated', {
       user: this.user,
@@ -33,8 +33,7 @@ class GameController {
 
     const otherPlayer = this.getOtherPlayer();
     this.currentPlayer.takeTurn(otherPlayer, coordinates);
-
-    this.currentPlayer = otherPlayer;
+    this.#toggleCurrentPlayer();
 
     if (this.checkGameOver()) {
       this.endGame();
@@ -43,8 +42,18 @@ class GameController {
 
     // Make the computer's move
     if (this.currentPlayer.isAi) {
-      this.processTurn();
+      // add some 'thinking' time
+      setTimeout(() => {
+        this.processTurn();
+      }, 1500);
     }
+  }
+
+  #toggleCurrentPlayer() {
+    this.currentPlayer = this.getOtherPlayer();
+    eventEmitter.emit('currentPlayerChange', {
+      currentPlayer: this.currentPlayer.name,
+    });
   }
 
   getOtherPlayer() {
@@ -62,12 +71,12 @@ class GameController {
     eventEmitter.emit('gameOver', { winner: this.currentPlayer });
   }
 
-  populateGameboard(...players) {
+  #populateGameboard(...players) {
     players.forEach((player) => {
       player.gameboard.placeShip([
-        [0, 0],
-        [0, 1],
-        [0, 2],
+        [1, 1],
+        [1, 2],
+        [1, 3],
       ]);
     });
   }
