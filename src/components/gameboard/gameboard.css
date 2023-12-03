@@ -1,3 +1,9 @@
 .game__gameboard {
-  background-color: red;
+  background-color: darkseagreen;
+  width: 600px;
+}
+
+.game__tile {
+  border: 2px solid black;
+  aspect-ratio: 1;
 }
