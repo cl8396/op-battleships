@@ -7,12 +7,18 @@ class GameboardComponent {
     this.container = container;
     this.shipsVisible = true;
     this.gameboard = gameboard;
-
+    this.tiles = [];
     this.element = this.render(gameboard);
 
-    eventEmitter.on('gameboardChange', (data) => {
+    eventEmitter.on('tileHit', (data) => {
       if (data.gameboard === this.gameboard) {
-        this.update(data.coordinates, data.gameboard);
+        this.update(data.coordinates, 'hit');
+      }
+    });
+
+    eventEmitter.on('tileMissed', (data) => {
+      if (data.gameboard === this.gameboard) {
+        this.update(data.coordinates, 'miss');
       }
     });
   }
@@ -35,6 +41,7 @@ class GameboardComponent {
     for (let i = grid[1].length - 1; i > 0; i--) {
       for (let j = 1; j <= grid.length - 1; j++) {
         let tile = new GameboardTile(j, i, grid[j][i]);
+        this.tiles.push(tile);
         let tileElement = tile.create();
 
         if (this.shipsVisible) {
@@ -48,28 +55,18 @@ class GameboardComponent {
     return gridContainer;
   }
 
-  update(coordinates, gameboard) {
-    console.log(coordinates);
-    let grid = this.element.children[0].children;
-    let tile = this.#findTile(grid, coordinates);
-    tile.textContent = 'SHOT';
+  update(coordinates, content) {
+    const tile = this.tiles.find((tile) => {
+      return tile.x === coordinates[0] && tile.y === coordinates[1];
+    });
 
-    let x = coordinates[0];
-    let y = coordinates[1];
-  }
-
-  #findTile(grid, coordinates) {
-    let x = coordinates[0];
-    let y = coordinates[1];
-
-    for (let i = 0; i < grid.length; i++) {
-      const tile = grid[i];
-      const tileX = tile.getAttribute('x');
-      const tileY = tile.getAttribute('y');
-
-      if (tileX === x.toString() && tileY === y.toString()) {
-        return tile;
-      }
+    switch (content) {
+      case 'hit':
+        tile.hit();
+        break;
+      case 'miss':
+        tile.miss();
+        break;
     }
   }
 }

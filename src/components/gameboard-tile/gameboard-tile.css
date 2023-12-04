@@ -1,4 +1,12 @@
 .game__tile--ship {
-  background-color: rgb(29, 50, 50);
+  background-color: hsl(180, 27%, 15%);
   color: white;
+}
+
+.game__tile--hit {
+  background-color: red;
+}
+
+.game__tile--miss {
+  background-color: hsl(180, 27%, 55%);
 }

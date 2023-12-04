@@ -28,6 +28,18 @@ class GameboardTile {
       this.element.classList.remove('game__tile--ship');
     }
   }
+
+  hit() {
+    if (this.element) {
+      this.element.classList.add('game__tile--hit');
+    }
+  }
+
+  miss() {
+    if (this.element) {
+      this.element.classList.add('game__tile--miss');
+    }
+  }
 }
 
 export default GameboardTile;
