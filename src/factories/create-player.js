@@ -17,12 +17,19 @@ function createPlayer(name, options = {}) {
       coordinates = generateCoordinates();
     }
 
-    enemy.gameboard.receiveAttack(coordinates);
+    const isHit = enemy.gameboard.receiveAttack(coordinates);
 
-    eventEmitter.emit('gameboardChange', {
-      coordinates: coordinates,
-      gameboard: enemy.gameboard,
-    });
+    if (isHit) {
+      eventEmitter.emit('tileHit', {
+        coordinates: coordinates,
+        gameboard: enemy.gameboard,
+      });
+    } else {
+      eventEmitter.emit('tileMissed', {
+        coordinates: coordinates,
+        gameboard: enemy.gameboard,
+      });
+    }
     tries.push(coordinates);
   };
 
