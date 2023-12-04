@@ -21,9 +21,11 @@ function createGameboard() {
 
     if (!ship) {
       misses.push(coordinates);
+      return false;
     } else {
       ship.hit();
       hits.push(coordinates);
+      return true;
     }
   };
 
