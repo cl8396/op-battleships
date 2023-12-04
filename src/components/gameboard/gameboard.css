@@ -1,9 +1,9 @@
 .game__gameboard {
-  background-color: hsl(204, 56%, 35%);
+  background-color: hsl(204, 56%, 42%);
   width: 600px;
 }
 
 .game__tile {
-  border: 2px solid black;
+  border: 1px dashed hsl(0, 0%, 0%);
   aspect-ratio: 1;
 }
