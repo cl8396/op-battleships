@@ -42,7 +42,13 @@ class GameController {
     }
 
     const otherPlayer = this.getOtherPlayer();
-    this.currentPlayer.takeTurn(otherPlayer, coordinates);
+
+    try {
+      this.currentPlayer.takeTurn(otherPlayer, coordinates);
+    } catch (error) {
+      console.log(error);
+      return;
+    }
 
     if (this.checkGameOver()) {
       this.endGame();
