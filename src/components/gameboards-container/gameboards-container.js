@@ -10,6 +10,7 @@ class GameboardsContainer {
     this.element = this.render();
 
     eventEmitter.on('playersCreated', (players) => {
+      this.depopulate();
       this.populate(players);
     });
   }
@@ -22,6 +23,7 @@ class GameboardsContainer {
   }
 
   populate(players) {
+    // create and render UI gameboard components representing each player's boards
     for (const key in players) {
       let player = players[key];
       let container = document.createElement('div');
@@ -35,10 +37,7 @@ class GameboardsContainer {
 
   depopulate() {
     removeAllChildNodes(this.element);
-    this.boards = [];
   }
-
-  update() {}
 }
 
 export default GameboardsContainer;
