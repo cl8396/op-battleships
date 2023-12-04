@@ -7,6 +7,16 @@ class GameController {
     this.opponent = null;
     this.isGameOver = true;
     this.currentPlayer = null;
+
+    eventEmitter.on('targetSelected', (data) => {
+      if (this.currentPlayer.isAi) {
+        return;
+      }
+
+      if (data.gameboard === this.getOtherPlayer().gameboard) {
+        this.processTurn(data.coordinates);
+      }
+    });
   }
 
   newGame() {

@@ -21,6 +21,14 @@ class GameboardComponent {
         this.update(data.coordinates, 'miss');
       }
     });
+
+    this.element.addEventListener('click', (e) => {
+      let coordinates = this.getCoordinatesFromElement(e.target);
+      eventEmitter.emit('targetSelected', {
+        coordinates: coordinates,
+        gameboard: this.gameboard,
+      });
+    });
   }
 
   render(gameboard) {
@@ -68,6 +76,13 @@ class GameboardComponent {
         tile.miss();
         break;
     }
+  }
+
+  getCoordinatesFromElement(element) {
+    let x = parseInt(element.getAttribute('x'));
+    let y = parseInt(element.getAttribute('y'));
+
+    return [x, y];
   }
 }
 
