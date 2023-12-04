@@ -1,3 +1,4 @@
+import eventEmitter from '../../modules/event-emitter';
 import './game-menu.css';
 
 class GameMenu {
@@ -10,8 +11,15 @@ class GameMenu {
     const element = document.createElement('div');
     element.classList.add('game__menu');
     element.textContent = 'game menu';
-    this.container.appendChild(element);
 
+    const newGameBtn = document.createElement('button');
+    newGameBtn.textContent = 'New Game';
+    newGameBtn.addEventListener('click', () => {
+      eventEmitter.emit('newGameRequested');
+    });
+    element.appendChild(newGameBtn);
+
+    this.container.appendChild(element);
     return element;
   }
 }

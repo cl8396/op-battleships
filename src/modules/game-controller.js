@@ -7,6 +7,8 @@ class GameController {
     this.opponent = null;
     this.isGameOver = true;
     this.currentPlayer = null;
+    // must store a reference to timeout to be able to manually clear it if required
+    this.computerTimeout = null;
 
     eventEmitter.on('targetSelected', (data) => {
       if (this.currentPlayer.isAi) {
@@ -17,9 +19,12 @@ class GameController {
         this.processTurn(data.coordinates);
       }
     });
+
+    eventEmitter.on('newGameRequested', () => this.newGame());
   }
 
   newGame() {
+    this.#clearTimeout();
     this.isGameOver = false;
     this.user = createPlayer('player1');
     this.opponent = createPlayer('computer', { isAi: true });
@@ -60,7 +65,7 @@ class GameController {
     // Make the computer's move
     if (this.currentPlayer.isAi) {
       // add some 'thinking' time
-      setTimeout(() => {
+      this.computerTimeout = setTimeout(() => {
         this.processTurn();
       }, 1500);
     }
@@ -96,6 +101,11 @@ class GameController {
         [1, 3],
       ]);
     });
+  }
+
+  #clearTimeout() {
+    clearTimeout(this.computerTimeout);
+    this.computerTimeout = null;
   }
 }
 
