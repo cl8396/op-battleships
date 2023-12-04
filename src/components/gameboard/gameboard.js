@@ -1,11 +1,14 @@
 import eventEmitter from '../../modules/event-emitter';
 import './gameboard.css';
+import GameboardTile from '../gameboard-tile/gameboard-tile';
 
 class GameboardComponent {
   constructor(container, gameboard) {
     this.container = container;
-    this.element = this.render(gameboard);
+    this.shipsVisible = true;
     this.gameboard = gameboard;
+
+    this.element = this.render(gameboard);
 
     eventEmitter.on('gameboardChange', (data) => {
       if (data.gameboard === this.gameboard) {
@@ -31,12 +34,14 @@ class GameboardComponent {
 
     for (let i = grid[1].length - 1; i > 0; i--) {
       for (let j = 1; j <= grid.length - 1; j++) {
-        let tile = document.createElement('div');
-        tile.setAttribute('x', j);
-        tile.setAttribute('y', i);
-        tile.textContent = `${j},${i}`;
-        tile.classList.add('game__tile');
-        gridContainer.appendChild(tile);
+        let tile = new GameboardTile(j, i, grid[j][i]);
+        let tileElement = tile.create();
+
+        if (this.shipsVisible) {
+          tile.showShip();
+        }
+
+        gridContainer.appendChild(tileElement);
       }
     }
 
