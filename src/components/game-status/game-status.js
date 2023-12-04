@@ -1,4 +1,5 @@
 import eventEmitter from '../../modules/event-emitter';
+import { removeAllChildNodes } from '../../helper-functions';
 import './game-status.css';
 
 class GameStatusDisplay {
@@ -7,7 +8,12 @@ class GameStatusDisplay {
     this.element = this.render();
 
     eventEmitter.on('currentPlayerChange', (data) => {
-      this.update(data.currentPlayer);
+      this.updatePlayer(data.currentPlayer);
+    });
+
+    eventEmitter.on('gameOver', (data) => {
+      this.clear();
+      this.updateStatus(`Game Over. The winner is ${data.winner}`);
     });
   }
 
@@ -18,8 +24,16 @@ class GameStatusDisplay {
     return element;
   }
 
-  update(currentPlayer) {
+  updatePlayer(currentPlayer) {
     this.element.textContent = `${currentPlayer}'s turn`;
+  }
+
+  updateStatus(status) {
+    this.element.textContent = status;
+  }
+
+  clear() {
+    this.element.textContent = '';
   }
 }
 

@@ -43,12 +43,13 @@ class GameController {
 
     const otherPlayer = this.getOtherPlayer();
     this.currentPlayer.takeTurn(otherPlayer, coordinates);
-    this.#toggleCurrentPlayer();
 
     if (this.checkGameOver()) {
       this.endGame();
       return;
     }
+
+    this.#toggleCurrentPlayer();
 
     // Make the computer's move
     if (this.currentPlayer.isAi) {
@@ -78,7 +79,7 @@ class GameController {
 
   endGame() {
     this.isGameOver = true;
-    eventEmitter.emit('gameOver', { winner: this.currentPlayer });
+    eventEmitter.emit('gameOver', { winner: this.currentPlayer.name });
   }
 
   #populateGameboard(...players) {
