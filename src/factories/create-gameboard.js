@@ -4,6 +4,7 @@ function createGameboard() {
   let grid = [];
   let misses = [];
   let ships = [];
+  let hits = [];
 
   for (let i = 1; i <= 10; i++) {
     grid[i] = [];
@@ -22,6 +23,7 @@ function createGameboard() {
       misses.push(coordinates);
     } else {
       ship.hit();
+      hits.push(coordinates);
     }
   };
 
@@ -42,7 +44,7 @@ function createGameboard() {
     return aliveShips.length === 0 ? true : false;
   };
 
-  return { areAllSunk, placeShip, receiveAttack, grid, misses };
+  return { areAllSunk, placeShip, receiveAttack, grid, misses, hits };
 }
 
 export default createGameboard;
