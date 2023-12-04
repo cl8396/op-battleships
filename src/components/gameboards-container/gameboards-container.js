@@ -31,6 +31,9 @@ class GameboardsContainer {
       header.textContent = player.name;
       container.appendChild(header);
       let gameboard = new GameboardComponent(container, player.gameboard);
+      if (player.isAi) {
+        gameboard.hideShips();
+      }
       this.element.appendChild(container);
     }
   }

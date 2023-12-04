@@ -22,6 +22,8 @@ class GameboardComponent {
       }
     });
 
+    eventEmitter.on('gameOver', () => this.showShips());
+
     this.element.addEventListener('click', (e) => {
       let coordinates = this.getCoordinatesFromElement(e.target);
       eventEmitter.emit('targetSelected', {
@@ -76,6 +78,16 @@ class GameboardComponent {
         tile.miss();
         break;
     }
+  }
+
+  hideShips() {
+    this.shipsVisible = false;
+    this.tiles.forEach((tile) => tile.hideShip());
+  }
+
+  showShips() {
+    this.shipsVisible = true;
+    this.tiles.forEach((tile) => tile.showShip());
   }
 
   getCoordinatesFromElement(element) {
