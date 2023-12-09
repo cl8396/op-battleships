@@ -20,14 +20,23 @@ class GameController {
       }
     });
 
+    eventEmitter.on('opponentSelected', (type) => {
+      this.user = createPlayer('player1');
+      switch (type) {
+        case '1p':
+          this.opponent = createPlayer('computer', { isAi: true });
+          break;
+        case '2p':
+          this.opponent = createPlayer('player2');
+      }
+    });
+
     eventEmitter.on('newGameRequested', () => this.newGame());
   }
 
   newGame() {
     this.#clearTimeout();
     this.isGameOver = false;
-    this.user = createPlayer('player1');
-    this.opponent = createPlayer('computer', { isAi: true });
     this.#populateGameboard(this.user, this.opponent);
     this.currentPlayer = this.user;
 
