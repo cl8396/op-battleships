@@ -19,6 +19,14 @@ class GameMenu {
     });
     element.appendChild(newGameBtn);
 
+    let mainMenuBtn = document.createElement('button');
+    mainMenuBtn.textContent = 'Main Menu';
+    mainMenuBtn.addEventListener('click', () => {
+      eventEmitter.emit('menuChangeView', 'main');
+      eventEmitter.emit('openMainMenu');
+    });
+    element.appendChild(mainMenuBtn);
+
     this.container.appendChild(element);
     return element;
   }
