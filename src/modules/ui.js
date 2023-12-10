@@ -12,8 +12,8 @@ class UI {
     this.menu.show();
     this.game.hide();
 
-    // Event listener for a new game request
-    eventEmitter.on('newGameRequested', () => {
+    // Event listener for a new game start
+    eventEmitter.on('newGameStarted', () => {
       // Handle the event by switching to the game view
       this.menu.hide();
       this.game.show();
