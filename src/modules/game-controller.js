@@ -21,26 +21,29 @@ class GameController {
     });
 
     eventEmitter.on('opponentSelected', (type) => {
-      this.user = createPlayer('player1');
-      switch (type) {
-        case '1p':
-          this.opponent = createPlayer('computer', { isAi: true });
-          break;
-        case '2p':
-          this.opponent = createPlayer('player2');
+      if (type === 1) {
+        this.opponent = createPlayer('computer', { isAi: true });
       }
+    });
+
+    eventEmitter.on('createUser', (name) => {
+      this.user = createPlayer(name);
+    });
+
+    eventEmitter.on('createOpponent', (name) => {
+      this.opponent = createPlayer(name);
     });
 
     eventEmitter.on('newGameRequested', () => this.newGame());
   }
 
   newGame() {
-    this.#clearTimeout();
     this.isGameOver = false;
-    this.#populateGameboard(this.user, this.opponent);
-    this.currentPlayer = this.user;
 
-    eventEmitter.emit('newGameStarted');
+    this.#resetPlayers(this.user, this.opponent);
+    this.#populateGameboard(this.user, this.opponent);
+
+    this.currentPlayer = this.user;
     eventEmitter.emit('currentPlayerChange', {
       currentPlayer: this.currentPlayer.name,
     });
@@ -48,6 +51,8 @@ class GameController {
       user: this.user,
       opponent: this.opponent,
     });
+
+    eventEmitter.emit('newGameStarted');
   }
 
   processTurn(coordinates) {
@@ -99,6 +104,7 @@ class GameController {
 
   endGame() {
     this.isGameOver = true;
+    this.#clearTimeout();
     eventEmitter.emit('gameOver', { winner: this.currentPlayer.name });
   }
 
@@ -109,6 +115,12 @@ class GameController {
         [1, 2],
         [1, 3],
       ]);
+    });
+  }
+
+  #resetPlayers(...players) {
+    players.forEach((player) => {
+      player.reset();
     });
   }
 
