@@ -1,16 +1,22 @@
 import createGameboard from './create-gameboard.js';
 import eventEmitter from '../modules/event-emitter.js';
 
-function createPlayer(name, options = {}) {
+function createPlayer(playerName, options = {}) {
   let gameboard;
+  let name = playerName;
+  const tries = [];
+  const isAi = options.isAi || false;
 
   if (options.createGameboard) {
     gameboard = options.createGameboard();
   } else {
     gameboard = createGameboard();
   }
-  const tries = [];
-  const isAi = options.isAi || false;
+
+  const reset = () => {
+    tries.length = 0;
+    gameboard.initBoard();
+  };
 
   const takeTurn = (enemy, coordinates) => {
     if (!coordinates) {
@@ -69,6 +75,7 @@ function createPlayer(name, options = {}) {
     tries,
     isAi,
     takeTurn,
+    reset,
   };
 }
 

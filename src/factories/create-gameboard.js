@@ -1,17 +1,23 @@
 import createShip from './create-ship.js';
 
 function createGameboard() {
-  let grid = [];
+  let grid;
   let misses = [];
   let ships = [];
   let hits = [];
 
-  for (let i = 1; i <= 10; i++) {
-    grid[i] = [];
-    for (let j = 1; j <= 10; j++) {
-      grid[i][j] = null;
+  const initBoard = () => {
+    grid = [];
+    for (let i = 1; i <= 10; i++) {
+      grid[i] = [];
+      for (let j = 1; j <= 10; j++) {
+        grid[i][j] = null;
+      }
     }
-  }
+    hits = [];
+    ships = [];
+    misses = [];
+  };
 
   const receiveAttack = (coordinates) => {
     let x = coordinates[0];
@@ -46,7 +52,17 @@ function createGameboard() {
     return aliveShips.length === 0 ? true : false;
   };
 
-  return { areAllSunk, placeShip, receiveAttack, grid, misses, hits };
+  initBoard();
+
+  return {
+    areAllSunk,
+    placeShip,
+    receiveAttack,
+    initBoard,
+    grid,
+    misses,
+    hits,
+  };
 }
 
 export default createGameboard;
