@@ -8,8 +8,20 @@ class GameSetupMenu {
     this.element = this.render();
     this.opponentType = new OpponentTypePage(this.element);
     this.playerNames = new PlayerNames(this.element);
-
     this.playerNames.hide();
+
+    eventEmitter.on('gameSetupViewChange', (view) => {
+      switch (view) {
+        case 'opponentType':
+          this.playerNames.hide();
+          this.opponentType.show();
+          break;
+        case 'nameInput':
+          this.playerNames.show();
+          this.opponentType.hide();
+          break;
+      }
+    });
   }
 
   render() {
@@ -29,6 +41,8 @@ class GameSetupMenu {
 
   show() {
     this.container.appendChild(this.element);
+    this.playerNames.hide();
+    this.opponentType.show();
   }
 
   hide() {

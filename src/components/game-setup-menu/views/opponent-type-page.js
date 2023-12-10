@@ -13,15 +13,15 @@ class OpponentTypePage {
     let players1Btn = document.createElement('button');
     players1Btn.textContent = '1 Player';
     players1Btn.addEventListener('click', () => {
+      eventEmitter.emit('opponentSelected', 1);
       eventEmitter.emit('gameSetupViewChange', 'nameInput');
-      eventEmitter.emit('opponentSelected', '1p');
     });
 
     let players2Btn = document.createElement('button');
     players2Btn.textContent = '2 Players';
     players2Btn.addEventListener('click', () => {
+      eventEmitter.emit('opponentSelected', 2);
       eventEmitter.emit('gameSetupViewChange', 'nameInput');
-      eventEmitter.emit('opponentSelected', '2p');
     });
 
     element.appendChild(players1Btn);
