@@ -1,13 +1,12 @@
 import createShip from './create-ship.js';
 
 function createGameboard() {
-  let grid;
+  let grid = [];
   let misses = [];
   let ships = [];
   let hits = [];
 
   const initBoard = () => {
-    grid = [];
     for (let i = 1; i <= 10; i++) {
       grid[i] = [];
       for (let j = 1; j <= 10; j++) {
@@ -45,6 +44,7 @@ function createGameboard() {
       grid[x][y] = newShip;
     });
     ships.push(newShip);
+    console.log(grid);
   };
 
   const areAllSunk = () => {
