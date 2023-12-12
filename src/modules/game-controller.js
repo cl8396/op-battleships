@@ -41,12 +41,15 @@ class GameController {
     this.isGameOver = false;
 
     this.#resetPlayers(this.user, this.opponent);
+    // add ships to each gameboard
     this.#populateGameboard(this.user, this.opponent);
 
     this.currentPlayer = this.user;
     eventEmitter.emit('currentPlayerChange', {
       currentPlayer: this.currentPlayer.name,
     });
+
+    // creates gameboard components for each player in the gameboards container component
     eventEmitter.emit('playersCreated', {
       user: this.user,
       opponent: this.opponent,
