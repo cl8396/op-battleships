@@ -3,12 +3,12 @@ import './gameboard.css';
 import GameboardTile from '../gameboard-tile/gameboard-tile';
 
 class GameboardComponent {
-  constructor(container, gameboard) {
+  constructor(container, player) {
     this.container = container;
     this.shipsVisible = true;
-    this.gameboard = gameboard;
+    this.gameboard = player.gameboard;
     this.tiles = [];
-    this.element = this.render(gameboard);
+    this.element = this.render(player);
 
     eventEmitter.on('tileHit', (data) => {
       if (data.gameboard === this.gameboard) {
@@ -33,10 +33,17 @@ class GameboardComponent {
     });
   }
 
-  render(gameboard) {
+  render(player) {
     const element = document.createElement('div');
     element.classList.add('game__gameboard');
-    const grid = this.#createGrid(gameboard.grid);
+    const header = document.createElement('header');
+    header.textContent = `${player.name}'s board`;
+    element.appendChild(header);
+
+    const grid = this.#createGrid(player.gameboard.grid);
+    if (player.isAi) {
+      this.hideShips();
+    }
     element.appendChild(grid);
     this.container.appendChild(element);
     return element;
@@ -95,6 +102,14 @@ class GameboardComponent {
     let y = parseInt(element.getAttribute('y'));
 
     return [x, y];
+  }
+
+  hide() {
+    this.container.removeChild(this.element);
+  }
+
+  show() {
+    this.container.appendChild(this.element);
   }
 }
 

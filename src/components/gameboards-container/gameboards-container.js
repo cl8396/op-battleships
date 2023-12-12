@@ -10,8 +10,8 @@ class GameboardsContainer {
     this.element = this.render();
 
     eventEmitter.on('playersCreated', (players) => {
-      this.depopulate();
-      this.populate(players);
+      this.clear();
+      this.createGameboards(players);
     });
   }
 
@@ -22,23 +22,15 @@ class GameboardsContainer {
     return element;
   }
 
-  populate(players) {
+  createGameboards(players) {
     // create and render UI gameboard components representing each player's boards
     for (const key in players) {
       let player = players[key];
-      let container = document.createElement('div');
-      let header = document.createElement('header');
-      header.textContent = player.name;
-      container.appendChild(header);
-      let gameboard = new GameboardComponent(container, player.gameboard);
-      if (player.isAi) {
-        gameboard.hideShips();
-      }
-      this.element.appendChild(container);
+      let gameboard = new GameboardComponent(this.element, player);
     }
   }
 
-  depopulate() {
+  clear() {
     removeAllChildNodes(this.element);
   }
 }
