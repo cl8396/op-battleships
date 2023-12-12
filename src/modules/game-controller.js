@@ -45,16 +45,15 @@ class GameController {
     this.#populateGameboard(this.user, this.opponent);
 
     this.currentPlayer = this.user;
-    eventEmitter.emit('currentPlayerChange', {
-      currentPlayer: this.currentPlayer.name,
-    });
+    eventEmitter.emit('currentPlayerChange', this.currentPlayer);
 
-    // creates gameboard components for each player in the gameboards container component
+    // creates gameboard components for each player and renders in the gameboards container component
     eventEmitter.emit('playersCreated', {
       user: this.user,
       opponent: this.opponent,
     });
 
+    // hide menu and show game
     eventEmitter.emit('newGameStarted');
   }
 
@@ -90,9 +89,7 @@ class GameController {
 
   #toggleCurrentPlayer() {
     this.currentPlayer = this.getOtherPlayer();
-    eventEmitter.emit('currentPlayerChange', {
-      currentPlayer: this.currentPlayer.name,
-    });
+    eventEmitter.emit('currentPlayerChange', this.currentPlayer);
   }
 
   getOtherPlayer() {

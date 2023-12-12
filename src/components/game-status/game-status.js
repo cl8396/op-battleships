@@ -7,8 +7,8 @@ class GameStatusDisplay {
     this.container = container;
     this.element = this.render();
 
-    eventEmitter.on('currentPlayerChange', (data) => {
-      this.updatePlayer(data.currentPlayer);
+    eventEmitter.on('currentPlayerChange', (currentPlayer) => {
+      this.updatePlayer(currentPlayer.name);
     });
 
     eventEmitter.on('gameOver', (data) => {
