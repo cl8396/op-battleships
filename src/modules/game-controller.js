@@ -20,18 +20,18 @@ class GameController {
       }
     });
 
-    eventEmitter.on('opponentSelected', (type) => {
-      if (type === 1) {
-        this.opponent = createPlayer('computer', { isAi: true });
-      }
-    });
-
-    eventEmitter.on('createUser', (name) => {
+    eventEmitter.on('createUserRequested', (name) => {
       this.user = createPlayer(name);
+      eventEmitter.emit('userCreated', this.user);
     });
 
-    eventEmitter.on('createOpponent', (name) => {
-      this.opponent = createPlayer(name);
+    eventEmitter.on('createOpponentRequested', (data) => {
+      if (data.isAi) {
+        this.opponent = createPlayer(data.name, { isAi: data.isAi });
+      } else {
+        this.opponent = createPlayer(data.name);
+      }
+      eventEmitter.emit('opponentCreated', this.opponent);
     });
 
     eventEmitter.on('newGameRequested', () => this.newGame());
@@ -46,12 +46,6 @@ class GameController {
 
     this.currentPlayer = this.user;
     eventEmitter.emit('currentPlayerChange', this.currentPlayer);
-
-    // creates gameboard components for each player and renders in the gameboards container component
-    eventEmitter.emit('playersCreated', {
-      user: this.user,
-      opponent: this.opponent,
-    });
 
     // hide menu and show game
     eventEmitter.emit('newGameStarted');

@@ -14,6 +14,10 @@ class OpponentTypePage {
     players1Btn.textContent = '1 Player';
     players1Btn.addEventListener('click', () => {
       eventEmitter.emit('opponentSelected', 1);
+      eventEmitter.emit('createOpponentRequested', {
+        name: 'Computer',
+        isAi: true,
+      });
       eventEmitter.emit('gameSetupViewChange', 'nameInput');
     });
 

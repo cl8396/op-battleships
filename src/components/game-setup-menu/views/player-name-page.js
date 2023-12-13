@@ -42,7 +42,7 @@ class PlayerNames {
     submitBtn.textContent = 'Okay';
     submitBtn.addEventListener('click', () => {
       let player1Name = player1InputElement.children[0].value;
-      eventEmitter.emit('createUser', player1Name);
+      eventEmitter.emit('createUserRequested', player1Name);
     });
     formElement.appendChild(submitBtn);
 
@@ -56,7 +56,7 @@ class PlayerNames {
         formElement.appendChild(player2InputElement);
         submitBtn.addEventListener('click', () => {
           let player2Name = player2InputElement.children[0].value;
-          eventEmitter.emit('createOpponent', player2Name);
+          eventEmitter.emit('createOpponentRequested', player2Name);
         });
         break;
     }

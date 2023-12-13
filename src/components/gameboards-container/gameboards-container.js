@@ -8,10 +8,25 @@ class GameboardsContainer {
   constructor(container) {
     this.container = container;
     this.element = this.render();
+    this.userElement = null;
+    this.opponentElement = null;
 
-    eventEmitter.on('playersCreated', (players) => {
-      this.clear();
-      this.createGameboards(players);
+    // create a new gameboard component for the player
+    eventEmitter.on('userCreated', (user) => {
+      // remove any previous gameboard component
+      if (this.userElement) {
+        this.userElement.hide();
+      }
+      this.userElement = new GameboardComponent(this.element, user);
+    });
+
+    // create a new gameboard component for the player
+    eventEmitter.on('opponentCreated', (opponent) => {
+      // remove any previous gameboard component
+      if (this.opponentElement) {
+        this.opponentElement.hide();
+      }
+      this.opponentElement = new GameboardComponent(this.element, opponent);
     });
   }
 
@@ -20,14 +35,6 @@ class GameboardsContainer {
     element.classList.add('game__gameboards-container');
     this.container.appendChild(element);
     return element;
-  }
-
-  createGameboards(players) {
-    // create and render UI gameboard components representing each player's boards
-    for (const key in players) {
-      let player = players[key];
-      let gameboard = new GameboardComponent(this.element, player);
-    }
   }
 
   clear() {
