@@ -1,5 +1,5 @@
 import createShip from './create-ship.js';
-
+import eventEmitter from '../modules/event-emitter.js';
 function createGameboard() {
   let grid = [];
   let misses = [];
@@ -43,8 +43,12 @@ function createGameboard() {
       let y = set[1];
       grid[x][y] = newShip;
     });
+
     ships.push(newShip);
-    console.log(grid);
+    eventEmitter.emit('shipPlaced', {
+      coordinates: coordinates,
+      grid: grid,
+    });
   };
 
   const areAllSunk = () => {

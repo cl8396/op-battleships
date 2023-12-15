@@ -17,6 +17,10 @@ class GameboardTile {
     return tile;
   }
 
+  placeShip() {
+    this.element.classList.add('game__tile--ship');
+  }
+
   showShip() {
     if (this.content && this.element) {
       this.element.classList.add('game__tile--ship');

@@ -22,6 +22,18 @@ class GameboardComponent {
       }
     });
 
+    eventEmitter.on('shipPlaced', (data) => {
+      if (data.grid !== this.gameboard.grid) {
+        return;
+      }
+      if (!this.shipsVisible) {
+        return;
+      }
+      data.coordinates.forEach((set) => {
+        this.update(set, 'ship');
+      });
+    });
+
     eventEmitter.on('gameOver', () => this.showShips());
 
     this.element.addEventListener('click', (e) => {
@@ -83,6 +95,9 @@ class GameboardComponent {
         break;
       case 'miss':
         tile.miss();
+        break;
+      case 'ship':
+        tile.placeShip();
         break;
     }
   }
