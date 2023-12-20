@@ -1,14 +1,40 @@
 import eventEmitter from '../../modules/event-emitter';
 import './gameboard.css';
 import GameboardTile from '../gameboard-tile/gameboard-tile';
+import Component from '../component';
 
-class GameboardComponent {
+class GameboardComponent extends Component {
   constructor(container, player) {
-    this.container = container;
+    super(container, player);
     this.shipsVisible = true;
     this.gameboard = player.gameboard;
     this.tiles = [];
-    this.element = this.render(player);
+    this.element = this.#createElement(player);
+    this.show();
+
+    this.element.addEventListener('click', (e) => {
+      let coordinates = this.getCoordinatesFromElement(e.target);
+      eventEmitter.emit('targetSelected', {
+        coordinates: coordinates,
+        gameboard: this.gameboard,
+      });
+    });
+  }
+
+  #createElement(player) {
+    const element = document.createElement('div');
+    element.classList.add('game__gameboard');
+    const header = document.createElement('header');
+    header.textContent = `${player.name}'s board`;
+    element.appendChild(header);
+
+    const grid = this.#createGrid(player.gameboard.grid);
+
+    if (player.isAi) {
+      this.hideShips();
+    }
+
+    element.appendChild(grid);
 
     eventEmitter.on('tileHit', (data) => {
       if (data.gameboard === this.gameboard) {
@@ -36,28 +62,6 @@ class GameboardComponent {
 
     eventEmitter.on('gameOver', () => this.showShips());
 
-    this.element.addEventListener('click', (e) => {
-      let coordinates = this.getCoordinatesFromElement(e.target);
-      eventEmitter.emit('targetSelected', {
-        coordinates: coordinates,
-        gameboard: this.gameboard,
-      });
-    });
-  }
-
-  render(player) {
-    const element = document.createElement('div');
-    element.classList.add('game__gameboard');
-    const header = document.createElement('header');
-    header.textContent = `${player.name}'s board`;
-    element.appendChild(header);
-
-    const grid = this.#createGrid(player.gameboard.grid);
-    if (player.isAi) {
-      this.hideShips();
-    }
-    element.appendChild(grid);
-    this.container.appendChild(element);
     return element;
   }
 
@@ -117,14 +121,6 @@ class GameboardComponent {
     let y = parseInt(element.getAttribute('y'));
 
     return [x, y];
-  }
-
-  hide() {
-    this.container.removeChild(this.element);
-  }
-
-  show() {
-    this.container.appendChild(this.element);
   }
 }
 

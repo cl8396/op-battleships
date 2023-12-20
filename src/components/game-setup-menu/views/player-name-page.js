@@ -1,17 +1,14 @@
 import eventEmitter from '../../../modules/event-emitter';
 import { removeAllChildNodes } from '../../../helper-functions';
+import Component from '../../component';
 
-class PlayerNames {
+class PlayerNames extends Component {
   constructor(container) {
-    this.container = container;
-    this.element = this.render();
-
-    eventEmitter.on('opponentSelected', (numPlayers) => {
-      this.update(numPlayers);
-    });
+    super(container);
+    this.element = this.#createElement();
   }
 
-  render() {
+  #createElement() {
     let element = document.createElement('div');
 
     let backBtn = document.createElement('button');
@@ -20,9 +17,12 @@ class PlayerNames {
       eventEmitter.emit('gameSetupViewChange', 'opponentType');
     });
 
+    eventEmitter.on('opponentSelected', (numPlayers) => {
+      this.update(numPlayers);
+    });
+
     element.appendChild(backBtn);
 
-    this.container.appendChild(element);
     return element;
   }
 
@@ -66,14 +66,6 @@ class PlayerNames {
     });
 
     this.element.appendChild(formElement);
-  }
-
-  show() {
-    this.container.appendChild(this.element);
-  }
-
-  hide() {
-    this.container.removeChild(this.element);
   }
 }
 

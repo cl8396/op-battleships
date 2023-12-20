@@ -1,13 +1,15 @@
+import Component from '../component.js';
 import eventEmitter from '../../modules/event-emitter';
 import './game-menu.css';
 
-class GameMenu {
+class GameMenu extends Component {
   constructor(container) {
-    this.container = container;
-    this.element = this.render();
+    super(container);
+    this.element = this.#createElement();
+    this.show();
   }
 
-  render() {
+  #createElement() {
     const element = document.createElement('div');
     element.classList.add('game__menu');
     element.textContent = 'game menu';
@@ -26,8 +28,6 @@ class GameMenu {
       eventEmitter.emit('openMainMenu');
     });
     element.appendChild(mainMenuBtn);
-
-    this.container.appendChild(element);
     return element;
   }
 }

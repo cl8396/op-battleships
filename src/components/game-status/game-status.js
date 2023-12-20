@@ -1,27 +1,32 @@
+import Component from '../component';
 import eventEmitter from '../../modules/event-emitter';
-import { removeAllChildNodes } from '../../helper-functions';
 import './game-status.css';
 
-class GameStatusDisplay {
+class GameStatusDisplay extends Component {
   constructor(container) {
-    this.container = container;
-    this.element = this.render();
+    super(container);
+    this.element = this.#createElement();
+    this.show();
+  }
+
+  #createElement() {
+    const element = document.createElement('div');
+    element.classList.add('game__status-display');
 
     eventEmitter.on('currentPlayerChange', (currentPlayer) => {
       this.updatePlayer(currentPlayer.name);
     });
 
     eventEmitter.on('gameOver', (data) => {
-      this.clear();
-      this.updateStatus(`Game Over. The winner is ${data.winner}`);
+      this.handleGameOver(data.winner);
     });
+
+    return element;
   }
 
-  render() {
-    const element = document.createElement('div');
-    element.classList.add('game__status-display');
-    this.container.appendChild(element);
-    return element;
+  handleGameOver(winner) {
+    this.clear();
+    this.updateStatus(`Game Over. The winner is ${winner}`);
   }
 
   updatePlayer(currentPlayer) {
@@ -34,6 +39,16 @@ class GameStatusDisplay {
 
   clear() {
     this.element.textContent = '';
+  }
+
+  remove() {
+    this.cleanup();
+    this.hide();
+  }
+
+  cleanup() {
+    eventEmitter.off('gameOver', this.handleGameOver);
+    eventEmitter.off('currentPlayerChange', this.updatePlayer);
   }
 }
 

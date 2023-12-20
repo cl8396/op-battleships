@@ -1,15 +1,21 @@
 import eventEmitter from '../../modules/event-emitter';
 import GameboardComponent from '../gameboard/gameboard';
 import { removeAllChildNodes } from '../../helper-functions';
-
 import './gameboards-container.css';
+import Component from '../component';
 
-class GameboardsContainer {
+class GameboardsContainer extends Component {
   constructor(container) {
-    this.container = container;
-    this.element = this.render();
+    super(container);
+    this.element = this.#createElement();
+    this.show();
     this.userElement = null;
     this.opponentElement = null;
+  }
+
+  #createElement() {
+    const element = document.createElement('div');
+    element.classList.add('game__gameboards-container');
 
     // create a new gameboard component for the player
     eventEmitter.on('userCreated', (user) => {
@@ -28,12 +34,7 @@ class GameboardsContainer {
       }
       this.opponentElement = new GameboardComponent(this.element, opponent);
     });
-  }
 
-  render() {
-    const element = document.createElement('div');
-    element.classList.add('game__gameboards-container');
-    this.container.appendChild(element);
     return element;
   }
 

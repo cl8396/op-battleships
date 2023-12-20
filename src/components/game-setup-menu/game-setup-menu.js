@@ -1,30 +1,18 @@
+import Component from '../component';
 import eventEmitter from '../../modules/event-emitter';
 import OpponentTypePage from './views/opponent-type-page';
 import PlayerNames from './views/player-name-page';
 
-class GameSetupMenu {
+class GameSetupMenu extends Component {
   constructor(container) {
-    this.container = container;
-    this.element = this.render();
+    super(container);
+    this.element = this.#createElement();
     this.opponentType = new OpponentTypePage(this.element);
     this.playerNames = new PlayerNames(this.element);
-    this.playerNames.hide();
-
-    eventEmitter.on('gameSetupViewChange', (view) => {
-      switch (view) {
-        case 'opponentType':
-          this.playerNames.hide();
-          this.opponentType.show();
-          break;
-        case 'nameInput':
-          this.playerNames.show();
-          this.opponentType.hide();
-          break;
-      }
-    });
+    this.opponentType.show();
   }
 
-  render() {
+  #createElement() {
     let element = document.createElement('div');
     element.textContent = 'GAME SETUP MENU';
 
@@ -35,18 +23,34 @@ class GameSetupMenu {
     });
 
     element.appendChild(backBtn);
-    this.container.appendChild(element);
+
+    eventEmitter.on('gameSetupViewChange', (newView) => {
+      this.handleGameSetupViewChange(newView);
+    });
+
     return element;
   }
 
-  show() {
-    this.container.appendChild(this.element);
-    this.playerNames.hide();
-    this.opponentType.show();
+  handleGameSetupViewChange(newView) {
+    switch (newView) {
+      case 'opponentType':
+        this.playerNames.hide();
+        this.opponentType.show();
+        break;
+      case 'nameInput':
+        this.playerNames.show();
+        this.opponentType.hide();
+        break;
+    }
   }
 
-  hide() {
-    this.container.removeChild(this.element);
+  cleanup() {
+    eventEmitter.off('gameSetupViewChange', this.handleGameSetupViewChange);
+  }
+
+  remove() {
+    this.cleanup();
+    this.hide();
   }
 }
 

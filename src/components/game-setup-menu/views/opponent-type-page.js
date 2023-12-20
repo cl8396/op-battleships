@@ -1,12 +1,13 @@
 import eventEmitter from '../../../modules/event-emitter';
+import Component from '../../component';
 
-class OpponentTypePage {
+class OpponentTypePage extends Component {
   constructor(container) {
-    this.container = container;
-    this.element = this.render();
+    super(container);
+    this.element = this.#createElement();
   }
 
-  render() {
+  #createElement() {
     let element = document.createElement('div');
     element.textContent = 'How many players';
 
@@ -30,16 +31,7 @@ class OpponentTypePage {
 
     element.appendChild(players1Btn);
     element.appendChild(players2Btn);
-    this.container.appendChild(element);
     return element;
-  }
-
-  show() {
-    this.container.appendChild(this.element);
-  }
-
-  hide() {
-    this.container.removeChild(this.element);
   }
 }
 
