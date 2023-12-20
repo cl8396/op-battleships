@@ -9,32 +9,19 @@ class GameboardsContainer extends Component {
     super(container);
     this.element = this.#createElement();
     this.show();
-    this.userElement = null;
-    this.opponentElement = null;
   }
 
   #createElement() {
     const element = document.createElement('div');
     element.classList.add('game__gameboards-container');
 
-    // create a new gameboard component for the player
-    eventEmitter.on('userCreated', (user) => {
-      // remove any previous gameboard component
-      if (this.userElement) {
-        this.userElement.hide();
-      }
-      this.userElement = new GameboardComponent(this.element, user);
+    eventEmitter.on('newGameStarted', (players) => {
+      // create new gameboard components for each player
+      this.clear();
+      players.forEach((player) => {
+        new GameboardComponent(this.element, player);
+      });
     });
-
-    // create a new gameboard component for the player
-    eventEmitter.on('opponentCreated', (opponent) => {
-      // remove any previous gameboard component
-      if (this.opponentElement) {
-        this.opponentElement.hide();
-      }
-      this.opponentElement = new GameboardComponent(this.element, opponent);
-    });
-
     return element;
   }
 

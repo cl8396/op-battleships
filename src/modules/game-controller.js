@@ -22,7 +22,6 @@ class GameController {
 
     eventEmitter.on('createUserRequested', (name) => {
       this.user = createPlayer(name);
-      eventEmitter.emit('userCreated', this.user);
     });
 
     eventEmitter.on('createOpponentRequested', (data) => {
@@ -31,13 +30,13 @@ class GameController {
       } else {
         this.opponent = createPlayer(data.name);
       }
-      eventEmitter.emit('opponentCreated', this.opponent);
     });
 
     eventEmitter.on('newGameRequested', () => this.newGame());
   }
 
   newGame() {
+    this.#clearTimeout();
     this.isGameOver = false;
 
     this.#resetPlayers(this.user, this.opponent);
@@ -48,7 +47,7 @@ class GameController {
     eventEmitter.emit('currentPlayerChange', this.currentPlayer);
 
     // hide menu and show game
-    eventEmitter.emit('newGameStarted');
+    eventEmitter.emit('newGameStarted', [this.user, this.opponent]);
   }
 
   processTurn(coordinates) {
