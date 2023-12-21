@@ -14,7 +14,7 @@ class GameboardComponent extends Component {
 
     this.element.addEventListener('click', (e) => {
       let coordinates = this.getCoordinatesFromElement(e.target);
-      eventEmitter.emit('targetSelected', {
+      eventEmitter.emit('tileClicked', {
         coordinates: coordinates,
         gameboard: this.gameboard,
       });

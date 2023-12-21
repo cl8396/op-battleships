@@ -10,7 +10,7 @@ class GameController {
     // must store a reference to timeout to be able to manually clear it if required
     this.computerTimeout = null;
 
-    eventEmitter.on('targetSelected', (data) => {
+    eventEmitter.on('tileClicked', (data) => {
       if (this.currentPlayer.isAi) {
         return;
       }
