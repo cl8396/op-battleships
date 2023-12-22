@@ -75,9 +75,12 @@ function createPlayer(playerName, options = {}) {
   };
 
   const randomlyPlaceShips = () => {
-    gameboard.placeShip([1, 1]);
-    gameboard.placeShip([2, 2]);
-    gameboard.placeShip([3, 3]);
+    while (gameboard.hasAllShipsPlaced() === false)
+      try {
+        gameboard.placeShip(generateCoordinates());
+      } catch (err) {
+        console.log(err);
+      }
   };
 
   return {
