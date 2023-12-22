@@ -16,6 +16,11 @@ function createPlayer(playerName, options = {}) {
   const reset = () => {
     tries.length = 0;
     gameboard.initBoard();
+
+    if (isAi) {
+      console.log('randomly placing ships');
+      randomlyPlaceShips();
+    }
   };
 
   const takeTurn = (enemy, coordinates) => {
@@ -67,6 +72,12 @@ function createPlayer(playerName, options = {}) {
       return generateCoordinates();
     }
     return [x, y];
+  };
+
+  const randomlyPlaceShips = () => {
+    gameboard.placeShip([1, 1]);
+    gameboard.placeShip([2, 2]);
+    gameboard.placeShip([3, 3]);
   };
 
   return {

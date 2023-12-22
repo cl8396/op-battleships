@@ -6,18 +6,13 @@ class GameController {
     this.user = null;
     this.opponent = null;
     this.isGameOver = true;
+    this.isPlaceShipsPhase = true;
     this.currentPlayer = null;
     // must store a reference to timeout to be able to manually clear it if required
     this.computerTimeout = null;
 
     eventEmitter.on('tileClicked', (data) => {
-      if (this.currentPlayer.isAi) {
-        return;
-      }
-
-      if (data.gameboard === this.getOtherPlayer().gameboard) {
-        this.processTurn(data.coordinates);
-      }
+      this.handleTileClick(data);
     });
 
     eventEmitter.on('createUserRequested', (name) => {
@@ -35,19 +30,74 @@ class GameController {
     eventEmitter.on('newGameRequested', () => this.newGame());
   }
 
+  handleTileClick(data) {
+    if (this.isPlaceShipsPhase) {
+      this.requestPlaceShip(data);
+      return;
+    }
+
+    if (this.currentPlayer.isAi) {
+      return;
+    }
+
+    if (data.gameboard === this.getOtherPlayer().gameboard) {
+      this.processTurn(data.coordinates);
+      return;
+    }
+  }
+
+  requestPlaceShip(data) {
+    let startCoords = data.coordinates;
+
+    if (!data.gameboard === this.currentPlayer.gameboard) {
+      return;
+    }
+
+    // let selectedShip = this.currentPlayer.gameboard.selectedShip;
+
+    // if (!selectedShip) {
+    //   throw new Error('No ship currently selected');
+    // }
+
+    this.currentPlayer.gameboard.placeShip(startCoords);
+
+    if (this.checkAllShipsPlaced() === true) {
+      console.log('place ships phase over');
+      this.isPlaceShipsPhase = false;
+      eventEmitter.emit('newGameStarted', [this.user, this.opponent]);
+    }
+  }
+
+  checkAllShipsPlaced() {
+    if (
+      this.user.gameboard.hasAllShipsPlaced() &&
+      this.opponent.gameboard.hasAllShipsPlaced()
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   newGame() {
     this.#clearTimeout();
     this.isGameOver = false;
 
     this.#resetPlayers(this.user, this.opponent);
     // add ships to each gameboard
-    this.#populateGameboard(this.user, this.opponent);
+    // this.#populateGameboard(this.user, this.opponent);
 
     this.currentPlayer = this.user;
     eventEmitter.emit('currentPlayerChange', this.currentPlayer);
 
+    this.placeShipsPhaseStart();
     // hide menu and show game
-    eventEmitter.emit('newGameStarted', [this.user, this.opponent]);
+    // eventEmitter.emit('newGameStarted', [this.user, this.opponent]);
+  }
+
+  placeShipsPhaseStart() {
+    this.isPlaceShipsPhase = true;
+    eventEmitter.emit('placeShipsPhaseStarted', this.currentPlayer);
   }
 
   processTurn(coordinates) {

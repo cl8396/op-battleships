@@ -22,6 +22,11 @@ class GameboardsContainer extends Component {
         new GameboardComponent(this.element, player);
       });
     });
+
+    eventEmitter.on('placeShipsPhaseStarted', (currentPlayer) => {
+      this.clear();
+      new GameboardComponent(this.element, currentPlayer);
+    });
     return element;
   }
 

@@ -13,8 +13,13 @@ class UI {
     this.game.hide();
 
     // Event listener for a new game start
-    eventEmitter.on('newGameStarted', () => {
-      // Handle the event by switching to the game view
+    // eventEmitter.on('newGameStarted', () => {
+    //   // Handle the event by switching to the game view
+    //   this.menu.hide();
+    //   this.game.show();
+    // });
+
+    eventEmitter.on('placeShipsPhaseStarted', () => {
       this.menu.hide();
       this.game.show();
     });
