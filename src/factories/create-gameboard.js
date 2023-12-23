@@ -6,6 +6,7 @@ function createGameboard() {
   let ships = [];
   let hits = [];
   let shipsToPlace;
+  let shipRotation = false;
 
   const initBoard = () => {
     for (let i = 1; i <= 10; i++) {
@@ -22,6 +23,10 @@ function createGameboard() {
       { type: 'submarine', posMap: [0, -1, 1] },
       { type: 'destroyer', posMap: [0, -1, 1, -2, 2] },
     ];
+  };
+
+  const toggleShipRotation = () => {
+    shipRotation = !shipRotation;
   };
 
   const receiveAttack = (coordinates) => {
@@ -72,9 +77,18 @@ function createGameboard() {
   };
 
   const getFullCoordinates = (startCoords, posMap) => {
-    let full = posMap.map((offset) => {
-      return [startCoords[0], startCoords[1] + offset];
-    });
+    let full;
+
+    if (shipRotation) {
+      full = posMap.map((offset) => {
+        return [startCoords[0] + offset, startCoords[1]];
+      });
+    } else {
+      full = posMap.map((offset) => {
+        return [startCoords[0], startCoords[1] + offset];
+      });
+    }
+
     if (full.every((set) => checkCoordinatesValid(set))) {
       return full;
     }
@@ -117,6 +131,7 @@ function createGameboard() {
     receiveAttack,
     initBoard,
     hasAllShipsPlaced,
+    toggleShipRotation,
     grid,
     misses,
     hits,

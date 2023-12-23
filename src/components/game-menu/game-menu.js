@@ -27,7 +27,15 @@ class GameMenu extends Component {
       eventEmitter.emit('menuChangeView', 'main');
       eventEmitter.emit('openMainMenu');
     });
+
+    let toggleShipRotationBtn = document.createElement('button');
+    toggleShipRotationBtn.textContent = 'Rotate Ship';
+    toggleShipRotationBtn.addEventListener('click', () => {
+      eventEmitter.emit('requestToggleShipRotation');
+    });
+
     element.appendChild(mainMenuBtn);
+    element.appendChild(toggleShipRotationBtn);
     return element;
   }
 }

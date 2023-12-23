@@ -77,6 +77,7 @@ function createPlayer(playerName, options = {}) {
   const randomlyPlaceShips = () => {
     while (gameboard.hasAllShipsPlaced() === false)
       try {
+        Math.round(Math.random()) == 0 ? gameboard.toggleShipRotation() : null;
         gameboard.placeShip(generateCoordinates());
       } catch (err) {
         console.log(err);

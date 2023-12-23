@@ -27,6 +27,10 @@ class GameController {
       }
     });
 
+    eventEmitter.on('requestToggleShipRotation', () => {
+      this.currentPlayer.gameboard.toggleShipRotation();
+    });
+
     eventEmitter.on('newGameRequested', () => this.newGame());
   }
 
